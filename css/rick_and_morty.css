@@ -13,7 +13,7 @@ body {
     background-repeat: no-repeat; /* Isso impede a repetição da imagem */
     background-attachment: fixed; /* Isso faz com que a imagem fique fixa no fundo */
     backdrop-filter: blur(1.2px);
-    color: white;
+    color: white !important;
   }
 
 #character-list{
@@ -23,3 +23,21 @@ body {
     justify-content: center;
 
 }
+.col-md-3 {
+    transition: background-color 0.3s ease; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+  
+.col-md-3:hover {
+    background-color: rgba(128, 128, 128, 0.7);
+    border-radius:2%;
+}
+
+h3{
+    text-align: center;
+}
+
