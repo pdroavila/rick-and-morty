@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rick and Morty Character Info</title>
+    <link rel="stylesheet" href="css/rick_and_morty.css">
+</head>
+<body>
+    <h1>Rick and Morty Character Information</h1>
+    <div id="character-info">
+        <h2>Character Details</h2>
+        <div id="character-list">
+        </div>
+    </div>
+
+    <script>
+        class RickAndMortyAPI {
+            constructor() {
+                this.baseURL = 'https://rickandmortyapi.com/api/';
+            }
+
+            async fetchData(endpoint) {
+                try {
+                    const response = await fetch(this.baseURL + endpoint);
+                    if (!response.ok) {
+                        throw new Error(`Erro na solicitação: ${response.status}`);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    console.error('Ocorreu um erro:', error);
+                }
+            }
+
+            async getAllCharacters() {
+                const characters = [];
+                let page = 1;
+
+                try {
+                    while (true) {
+                        const data = await this.fetchData(`character?page=${page}`);
+                        characters.push(...data.results);
+                        if (!data.info.next) {
+                            break;
+                        }
+
+                        page++;
+                    }
+                    console.log(characters)
+
+                    return characters;
+                } catch (error) {
+                    console.error('Ocorreu um erro:', error);
+                }
+            }
+        }
+
+        async function displayAllCharacters() {
+            const api = new RickAndMortyAPI();
+            const characters = await api.getAllCharacters();
+            const characterList = document.getElementById('character-list');
+
+            characters.forEach((characterData) => {
+                const characterItem = document.createElement('div');
+                const characterImage = document.createElement('img');
+                characterImage.src = characterData.image;
+                characterImage.alt = characterData.name;
+
+                const characterName = document.createElement('p');
+                characterName.textContent = `Name: ${characterData.name}`;
+
+                const characterSpecies = document.createElement('p');
+                characterSpecies.textContent = `Species: ${characterData.species}`;
+
+                const characterStatus = document.createElement('p');
+                characterStatus.textContent = `Status: ${characterData.status}`;
+
+                characterItem.appendChild(characterImage);
+                characterItem.appendChild(characterName);
+                characterItem.appendChild(characterSpecies);
+                characterItem.appendChild(characterStatus);
+                characterList.appendChild(characterItem);
+            });
+        }
+
+        displayAllCharacters();
+    </script>
+</body>
+</html>
